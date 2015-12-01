@@ -1,0 +1,10 @@
+if [ $# -ne 2 ]
+then
+	echo syntax: mount.iso isofile mountdir
+	exit 1
+fi
+
+ISO=$1
+MOUNTDIR=$2
+
+mount -o loop -t iso9660 $ISO $MOUNTDIR

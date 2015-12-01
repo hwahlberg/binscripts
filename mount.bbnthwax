@@ -1,0 +1,1 @@
+mount -t cifs //bolsrv0100.boliden.internal/Users\$/bbnthwa /home/bbnthwa/mnt/bbnthwa -ocredentials=/home/bbnthwa/.bbnthwa,uid=bbnthwa,gid=users,iocharset=utf8
