@@ -170,7 +170,7 @@ do
 	echo "exiftool '-filename<CreateDate' -d %Y%m%d_%H%M%S%%-c.%%le -P -r ${file}" >${OUTPUT} 
 	exiftool '-filename<CreateDate' -d %Y%m%d_%H%M%S%%-c.%%le -P -r ${file} >${OUTPUT} 2>&1 
 	# we need to set "file"-variable to new name after rename
-	file=$(ls -i1 * | grep ${inode} | cut -f2 -d' ')
+	file=$(ls -i1 * | grep ${inode} | awk '{print $2}')
 	echo "DO_RENAME: $file" >${OUTPUT}
     fi
     
