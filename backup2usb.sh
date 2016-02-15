@@ -1,5 +1,14 @@
 #!/bin/bash
 
+
+MOUNTDIR="/mnt/usbdisk2"
+
+if [ ! -d ${MOUNTDIR}/home_hwa ]
+then
+        echo "mount USB-disk2!"
+        exit 1
+fi
+
 cd $HOME
 
 for dir in \
@@ -14,7 +23,7 @@ for dir in \
     sql
 do
     echo -e "\n############   \"$dir\" ..."
-    rsync -avL --delete "$dir"  /usbbackup/home_hwa/Backup
+    rsync -avL --delete "$dir"  ${MOUNTDIR}/home_hwa/Backup
 done
 
 sync
