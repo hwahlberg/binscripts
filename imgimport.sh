@@ -26,6 +26,10 @@ files=""
 # CreateDate, option -D
 # Format "YYYY:MM:DD hh:mm:ss" alt "YYYY:MM:DD"
 
+# Default filename format
+FILENAME_FORMAT="%Y%m%d_%H%M%S%%-c.%%le"
+
+
 # Some flags
 DO_CREATEDATE="false"
 DO_RENAME="true"
@@ -35,10 +39,11 @@ DO_MOVE="false"
 
 function help() {
     echo
-    echo "imgimport.sh [-v] [-m] [-DYYYY:MM:DD [HH:MI:SS]] [-d destdir] [file(s)]"
+    echo "imgimport.sh [-v] [-m] [-n] [-DYYYY:MM:DD [HH:MI:SS]] [-d destdir] [file(s)]"
     echo "where:"
     echo "    -v verbose"
     echo "    -m import to destdir"
+    echo "    -n no rename of file"
     echo "    -D [YYYY:MM:DD [HH:MI:SS]] set CreateDate-tag"
     echo "    -d destdir (default ${HOME}/Photos/original)"
     echo "     [file(s)]. List of files. If empty, all files"
@@ -84,13 +89,13 @@ function isImage() {
 
 
 
-while getopts ":d:s:D:vmr" opt; do
+while getopts ":d:s:D:vmn" opt; do
     case $opt in
 	d) DSTDIR=$OPTARG
 	    ;;
 	m) DO_MOVE="true"
 	    ;;
-	r) DO_RENAME="false"
+	n) DO_RENAME="false"
 	    ;;
 	s) SRCDIR=$OPTARG
 	    ;;
@@ -123,6 +128,7 @@ then
     if [ $len -eq 11 ]
     then
         CREATEDATE="${CREATEDATE} 00:00:00"
+	FILENAME_FORMAT="%Y%m%d%%-c.%%le"
     elif [ $len -ne 20 ]
     then
         echo "Fel datum ${CREATEDATE} !"
@@ -167,8 +173,8 @@ do
 	# use inode to keep track of file
 	inode=$(ls -i $file | cut -f1 -d' ')
 	echo "inode is ${inode}" >${OUTPUT} 
-	echo "exiftool '-filename<CreateDate' -d %Y%m%d_%H%M%S%%-c.%%le -P -r ${file}" >${OUTPUT} 
-	exiftool '-filename<CreateDate' -d %Y%m%d_%H%M%S%%-c.%%le -P -r ${file} >${OUTPUT} 2>&1 
+	echo "exiftool '-filename<CreateDate' -d ${FILENAME_FORMAT} -P -r ${file}" >${OUTPUT} 
+	exiftool '-filename<CreateDate' -d ${FILENAME_FORMAT} -P -r ${file} >${OUTPUT} 2>&1 
 	# we need to set "file"-variable to new name after rename
 	file=$(ls -i1 * | grep ${inode} | awk '{print $2}')
 	echo "DO_RENAME: $file" >${OUTPUT}
