@@ -176,6 +176,7 @@ if __name__ == "__main__":
     checkCreateDate()
     
     mime = MimeTypes()
+    mime.add_type('image/tiff','.arw')
         
     fdnull = os.open("/dev/null", os.O_WRONLY)
     inodlist = []
